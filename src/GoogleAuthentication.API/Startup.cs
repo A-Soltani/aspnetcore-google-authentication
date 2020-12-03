@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,15 @@ namespace GoogleAuthentication.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(options =>
+                    {
+                        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    })
+                .AddGoogle(options =>
+                {
+                    options.ClientId = "141001624781-6mi6b6nq41l4p25kst4hhb0hcjdkv0b0.apps.googleusercontent.com";
+                    options.ClientSecret = "eXFpNvwdkuO9fDBrDDDLC9yk";
+                });
             services.AddControllersWithViews();
         }
 
@@ -40,6 +50,7 @@ namespace GoogleAuthentication.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
