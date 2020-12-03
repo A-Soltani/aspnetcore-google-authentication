@@ -27,6 +27,7 @@ namespace GoogleAuthentication.API
                     {
                         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     })
+                .AddCookie(options => options.LoginPath = "/account/google-login")
                 .AddGoogle(options =>
                 {
                     options.ClientId = "141001624781-6mi6b6nq41l4p25kst4hhb0hcjdkv0b0.apps.googleusercontent.com";
