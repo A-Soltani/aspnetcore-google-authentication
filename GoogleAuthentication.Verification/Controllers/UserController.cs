@@ -21,7 +21,7 @@ namespace GoogleAuthentication.Verification.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("User/GoogleCallBack")]
+        [HttpGet("GoogleCallBack")]
         public async Task<IActionResult> GoogleCallBack(string tokenId)
         {
             var googleLoginCallBackCommand = new GoogleLoginCallBackCommand()
