@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
+using GoogleAuthentication.Verification.Commands;
 using GoogleAuthentication.Verification.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +32,7 @@ namespace GoogleAuthentication.Verification
                 .AddControllers();
 
             services.AddTransient<GoogleAuthenticationConfig>(p => Configuration.GetSection("Authentication:Google").Get<GoogleAuthenticationConfig>());
+            services.AddTransient<IGoogleLoginCallBackCommandHandler, GoogleLoginCallBackCommandHandler>();
             services
                 .AddTransient<IGoogleAuthentication,
                     GoogleAuthentication.Verification.Infrastructure.GoogleAuthentication>();
