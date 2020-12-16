@@ -9,6 +9,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     <PackageReference Include="Refit.HttpClientFactory" Version="5.2.4" />
     <PackageReference Include="autofac" Version="6.0.0" />
+    <PackageReference Include="Google.Apis.Plus.v1" Version="1.49.0.1627" />
+    <PackageReference Include="Google.Apis.Oauth2.v2" Version="1.49.0.1869" />
   </ItemGroup>
 
 
