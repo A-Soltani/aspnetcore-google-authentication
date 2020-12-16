@@ -24,7 +24,7 @@ namespace GoogleAuthentication.Verification.Commands
 
         public async Task<JsonWebToken> HandleAsync(GoogleLoginCallBackCommand googleLoginCallBackCommand)
         {
-            var googleUser = await _googleAuthentication.GetGoogleUser(googleLoginCallBackCommand.TokenId);
+            var googleUser = await _googleAuthentication.VerifyGoogleUser(googleLoginCallBackCommand.TokenId);
             if (string.IsNullOrWhiteSpace(googleUser?.Email))
                 return new JsonWebToken
                 {

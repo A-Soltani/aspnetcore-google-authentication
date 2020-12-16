@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Google.Apis.Auth;
 using GoogleAuthentication.Verification.Infrastructure.DTOs;
 using Refit;
 using UserManagement.Acl.GoogleAuthentication;
@@ -10,6 +12,8 @@ namespace GoogleAuthentication.Verification.Infrastructure
     {
         Task<GoogleUserModel> GetGoogleUser(string code);
         Task<GoogleAccessTokenModel> GetGoogleAccessToken(string code);
+        Task<GoogleUserModel> VerifyGoogleUser(string idToken);
+
     }
 
     public class GoogleAuthentication : IGoogleAuthentication
@@ -25,7 +29,7 @@ namespace GoogleAuthentication.Verification.Infrastructure
         {
             var googleAccessToken = await GetGoogleAccessToken(code);
             if (googleAccessToken == null) return null;
-            
+
             var googleAuthenticationApi = RestService.For<IGoogleAuthenticationApi>(_googleAuthenticationConfig.UrlProfile);
             var googleUserModel = await googleAuthenticationApi.GetUserProfile(googleAccessToken.AccessToken);
 
@@ -48,6 +52,37 @@ namespace GoogleAuthentication.Verification.Infrastructure
             var googleAccessToken = await googleAuthenticationApi.GetAccessToken(getGoogleAccessTokenQuery);
 
             return googleAccessToken;
+        }
+
+        public async Task<GoogleUserModel> VerifyGoogleUser(string idToken)
+        {
+            var settings = new GoogleJsonWebSignature.ValidationSettings()
+            {
+                Audience = new List<string>()
+                {
+                    "223160961578-9pn2lc00p2qvs53o6ikbcf5bpuj047qt.apps.googleusercontent.com"
+                }
+            };
+            try
+            {
+
+                var validPayload = await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
+                if (validPayload == null)
+                    return null;
+
+                return new GoogleUserModel()
+                {
+                    Email = validPayload.Email,
+                    Id = validPayload.JwtId,
+                    Name = validPayload.Name,
+                    GivenName = validPayload.GivenName
+                };
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }
